@@ -60,7 +60,7 @@ var IronWorkerConnector = function(ironio_credentials) {
     });
   }
 
-  this.run = function(payload, callback, overrideWorkerName) {
+  this.run = function(payload, options, callback, overrideWorkerName) {
     // Queue task
     if(overrideWorkerName !== undefined) {
       worker_name = overrideWorkerName;
@@ -68,6 +68,12 @@ var IronWorkerConnector = function(ironio_credentials) {
     if(typeof worker_name !== 'string') {
       return callback(new Error('worker_name not given'));
     }
+    // combine options into postBody
+    // priority
+    // cluster
+    // retries
+    // retry delay
+    postBody = { code_name: worker_name, payload: payload }
 
     project.tasks.queue({ code_name: worker_name, payload: payload }, function(err, res) {
       // Check for error in adding to queue
